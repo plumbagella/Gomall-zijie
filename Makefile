@@ -32,7 +32,7 @@ gen-frontend:
 
 .PHONY: gen-auth
 gen-auth:
-	@cd app/auth && cwgo server -I ../../idl --type RPC --service auth --module github.com/cloudwego/biz-demo/gomall/app/auth --idl ../../idl/auth.proto
+	@cd app/auth && cwgo server -I ../../idl --type RPC --service user --module github.com/cloudwego/biz-demo/gomall/app/auth --idl ../../idl/user.proto
 
 
 ##@ Build

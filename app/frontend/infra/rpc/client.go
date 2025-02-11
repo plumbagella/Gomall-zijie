@@ -22,6 +22,7 @@ import (
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/infra/mtl"
 	frontendutils "github.com/cloudwego/biz-demo/gomall/app/frontend/utils"
 	"github.com/cloudwego/biz-demo/gomall/common/clientsuite"
+	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/auth/authservice"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/checkout/checkoutservice"
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order/orderservice"
@@ -41,6 +42,7 @@ var (
 	CartClient     cartservice.Client
 	CheckoutClient checkoutservice.Client
 	OrderClient    orderservice.Client
+	AuthClient     authservice.Client
 	once           sync.Once
 	err            error
 	registryAddr   string
@@ -113,5 +115,10 @@ func initCheckoutClient() {
 
 func initOrderClient() {
 	OrderClient, err = orderservice.NewClient("order", commonSuite)
+	frontendutils.MustHandleError(err)
+}
+
+func initAuthClient() {
+	AuthClient, err = authservice.NewClient("auth", commonSuite)
 	frontendutils.MustHandleError(err)
 }

@@ -20,9 +20,10 @@ import (
 	auth "github.com/cloudwego/biz-demo/gomall/app/frontend/hertz_gen/frontend/auth"
 	"github.com/cloudwego/biz-demo/gomall/app/frontend/infra/rpc"
 	frontendutils "github.com/cloudwego/biz-demo/gomall/app/frontend/utils"
+	authrpc "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/auth"
 	rpcuser "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/user"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/hertz-contrib/sessions"
+	"github.com/cloudwego/hertz/pkg/protocol"
 )
 
 type LoginService struct {
@@ -35,21 +36,38 @@ func NewLoginService(Context context.Context, RequestContext *app.RequestContext
 }
 
 func (h *LoginService) Run(req *auth.LoginReq) (resp string, err error) {
-	res, err := rpc.UserClient.Login(h.Context, &rpcuser.LoginReq{Email: req.Email, Password: req.Password})
+	// 验证用户凭证
+	loginResp, err := rpc.UserClient.Login(h.Context, &rpcuser.LoginReq{
+		Email:    req.Email,
+		Password: req.Password,
+	})
 	if err != nil {
 		return
 	}
 
-	session := sessions.Default(h.RequestContext)
-	session.Set("user_id", res.UserId)
-	err = session.Save()
-	frontendutils.MustHandleError(err)
+	// 获取 JWT token
+	tokenResp, err := rpc.AuthClient.DeliverTokenByRPC(h.Context, &authrpc.DeliverTokenReq{
+		UserId: loginResp.UserId,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	// 设置 token 到 cookie
+	h.RequestContext.SetCookie(
+		"jwt_token",
+		tokenResp.Token,
+		3600*24, // 24小时过期
+		"/",
+		"",
+		protocol.CookieSameSiteLaxMode, // 设置 Cookie 同站策略
+		false,
+		true,
+	)
+
 	redirect := "/"
 	if frontendutils.ValidateNext(req.Next) {
 		redirect = req.Next
-	}
-	if err != nil {
-		return "", err
 	}
 
 	return redirect, nil

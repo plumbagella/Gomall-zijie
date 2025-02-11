@@ -52,6 +52,8 @@ type Registry struct {
 	Password        string   `yaml:"password"`
 }
 
+var JwtSecret []byte
+
 // GetConf gets configuration instance
 func GetConf() *Config {
 	once.Do(initConf)
@@ -107,4 +109,13 @@ func LogLevel() klog.Level {
 	default:
 		return klog.LevelInfo
 	}
+}
+
+func init() {
+	secret := os.Getenv("JWT_SECRET")
+	if secret == "" {
+		// 如果没有设置，则使用默认值，仅用于开发调试
+		secret = "ASDASDWAGASFA"
+	}
+	JwtSecret = []byte(secret)
 }

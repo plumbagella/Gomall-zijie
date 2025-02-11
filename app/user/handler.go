@@ -18,6 +18,7 @@ import (
 	"context"
 
 	"github.com/cloudwego/biz-demo/gomall/app/user/biz/service"
+	"github.com/cloudwego/biz-demo/gomall/app/user/kitex_gen/user"
 	user "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/user"
 )
 
@@ -34,6 +35,13 @@ func (s *UserServiceImpl) Register(ctx context.Context, req *user.RegisterReq) (
 // Login implements the UserServiceImpl interface.
 func (s *UserServiceImpl) Login(ctx context.Context, req *user.LoginReq) (resp *user.LoginResp, err error) {
 	resp, err = service.NewLoginService(ctx).Run(req)
+
+	return resp, err
+}
+
+// Delete implements the UserServiceImpl interface.
+func (s *UserServiceImpl) Delete(ctx context.Context, req *user.DeleteReq) (resp *user.DeleteResp, err error) {
+	resp, err = service.NewDeleteService(ctx).Run(req)
 
 	return resp, err
 }
