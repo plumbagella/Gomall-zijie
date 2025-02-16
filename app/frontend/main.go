@@ -48,7 +48,7 @@ func main() {
 
 	mtl.InitMtl()
 	rpc.InitClient()
-	address := conf.GetConf().Hertz.Address
+	// address := conf.GetConf().Hertz.Address
 
 	p := hertzotelprovider.NewOpenTelemetryProvider(
 		hertzotelprovider.WithSdkTracerProvider(mtl.TracerProvider),
@@ -59,7 +59,7 @@ func main() {
 		c.Header("shop-trace-id", oteltrace.SpanFromContext(ctx).SpanContext().TraceID().String())
 	}))
 
-	h := server.New(server.WithHostPorts(address), server.WithTracer(
+	h := server.New(server.WithHostPorts(":8081"), server.WithTracer(
 		hertzprom.NewServerTracer(
 			"",
 			"",
