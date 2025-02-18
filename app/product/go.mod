@@ -4,8 +4,10 @@ go 1.21
 
 replace (
 	github.com/apache/thrift => github.com/apache/thrift v0.13.0
+	github.com/cloudwego/biz-demo/gomall/app/product/biz/model => ./biz/model
 	github.com/cloudwego/biz-demo/gomall/common => ../../common
 	github.com/cloudwego/biz-demo/gomall/rpc_gen => ../../rpc_gen
+	github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/product => ../../rpc_gen/kitex_gen/product
 )
 
 require (
