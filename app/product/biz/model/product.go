@@ -103,3 +103,11 @@ func SearchProduct(db *gorm.DB, ctx context.Context, q string) (product []*Produ
 	err = db.WithContext(ctx).Model(&Product{}).Find(&product, "name like ? or description like ?", "%"+q+"%", "%"+q+"%").Error
 	return product, err
 }
+
+func CreateProduct(db *gorm.DB, ctx context.Context, product *Product) (Product, error) {
+	err := db.WithContext(ctx).Create(product).Error
+	if err != nil {
+		return Product{}, err
+	}
+	return *product, nil
+}
