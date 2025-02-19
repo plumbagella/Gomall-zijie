@@ -35,7 +35,7 @@ func TestCreateProduct_Run(t *testing.T) {
 		Description: "Test Description",
 		Picture:     "test.jpg",
 		Price:       100.0,
-		Categories:  []string{"Sticker"},
+		Categories:  []string{"Wrong Category"},
 	}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)

@@ -30,7 +30,7 @@ type Product struct {
 	Description string     `json:"description"`
 	Picture     string     `json:"picture"`
 	Price       float32    `json:"price"`
-	Categories  []Category `json:"categories" gorm:"many2many:product_category"`
+	Categories  []Category `json:"categories" gorm:"many2many:product_category;constraint:OnDelete:CASCADE"`
 }
 
 func (p Product) TableName() string {
@@ -110,4 +110,15 @@ func CreateProduct(db *gorm.DB, ctx context.Context, product *Product) (Product,
 		return Product{}, err
 	}
 	return *product, nil
+}
+
+func DeleteProduct(db *gorm.DB, ctx context.Context, productId int) error {
+	result := db.WithContext(ctx).Delete(&Product{}, productId)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("product with ID %d not found", productId)
+	}
+	return nil
 }
