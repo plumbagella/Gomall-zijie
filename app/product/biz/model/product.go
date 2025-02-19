@@ -105,7 +105,7 @@ func SearchProduct(db *gorm.DB, ctx context.Context, q string) (product []*Produ
 }
 
 func CreateProduct(db *gorm.DB, ctx context.Context, product *Product) (Product, error) {
-	err := db.WithContext(ctx).Create(product).Error
+	err := db.WithContext(ctx).Model(&Product{}).Create(product).Error
 	if err != nil {
 		return Product{}, err
 	}
@@ -113,7 +113,18 @@ func CreateProduct(db *gorm.DB, ctx context.Context, product *Product) (Product,
 }
 
 func DeleteProduct(db *gorm.DB, ctx context.Context, productId int) error {
-	result := db.WithContext(ctx).Delete(&Product{}, productId)
+	result := db.WithContext(ctx).Model(&Product{}).Delete(&Product{}, productId)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("product with ID %d not found", productId)
+	}
+	return nil
+}
+
+func UpdateProduct(db *gorm.DB, ctx context.Context, productId int, product *Product) error {
+	result := db.WithContext(ctx).Model(&Product{}).Where(&Product{Base: Base{ID: productId}}).Updates(product)
 	if result.Error != nil {
 		return result.Error
 	}
