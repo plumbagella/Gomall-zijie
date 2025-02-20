@@ -104,12 +104,12 @@ func SearchProduct(db *gorm.DB, ctx context.Context, q string) (product []*Produ
 	return product, err
 }
 
-func CreateProduct(db *gorm.DB, ctx context.Context, product *Product) (Product, error) {
+func CreateProduct(db *gorm.DB, ctx context.Context, product *Product) error {
 	err := db.WithContext(ctx).Model(&Product{}).Create(product).Error
 	if err != nil {
-		return Product{}, err
+		return err
 	}
-	return *product, nil
+	return nil
 }
 
 func DeleteProduct(db *gorm.DB, ctx context.Context, productId int) error {
