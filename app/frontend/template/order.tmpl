@@ -6,7 +6,10 @@
                         {{ range $.orders }}
                         <div class="card">
                             <div class="card-body">
-                              <h6 class="card-subtitle mb-2 text-muted">{{.CreatedDate}} Order ID: {{.OrderId}}</h6>
+                              <h6 class="card-subtitle mb-2 text-muted">{{.CreatedDate}} Order ID: {{.OrderId}} | State: {{.OrderState}}</h6>
+                                {{ if ne .OrderState "paid" }}
+                                  <a href="/edit-order/{{.OrderId}}" class="btn btn-primary">Edit</a>
+                                {{ end }}
                               <ul class="list-group col-lg-12 col-sm-15">
                                 {{ range .Items }}
                                     <li class="list-group-item border-0">

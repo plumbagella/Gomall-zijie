@@ -1,0 +1,23 @@
+&{Env:test Kitex:{Service:order Address::8886 MetricsPort::9996 EnablePprof:false EnableGzip:false EnableAccessLog:false LogLevel:info LogFileName:log/kitex.log LogMaxSize:10 LogMaxBackups:50 LogMaxAge:3} MySQL:{DSN:%s:%s@tcp(%s:3306)/order?charset=utf8mb4&parseTime=True&loc=Local} Redis:{Address:127.0.0.1:6379 Username: Password: DB:0} Registry:{RegistryAddress:[127.0.0.1:8500] Username: Password:}}
+n
+2025/02/26 23:12:50 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[4.704ms] [34;2025-02-26T23:12:50.382+0800	INFO	 {23:12:50} | 200 | 
+2025/02/26 23:12:53 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[2.926ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
+23:12:50} | 200 |      0s | GET     | /static/image/logo.jpg 
+2025-02-26T23:12:50.453+0800	INFO	 {23:12:50} | 200 |      0s | GET     | /static/image/t-shirt.jpeg 
+2025-02-26T23:12:50.517+0800	INFO	 {23:12:50} | 200 |      0s | GET     | /static/image/t-shirt-2.jpeg 
+2025-02-26T23:12:50.550+0800	INFO	 {23:12:50} | 200 |      0s | GET     | /static/image/notebook.jpeg 
+2025-02-26T23:12:50.550+0800	INFO	 {23:12:50} | 200 |      0s | GET     | /static/image/sweatshirt.jpeg 
+2025-02-26T23:12:50.558+0800	INFO	 {23:12:50} | 200 |      0s | GET     | /static/image/mouse-pad.jpeg 
+2025-02-26T23:12:50.560+0800	INFO	 {23:12:50} | 200 |      0s | GET     | /static/image/t-shirt-1.jpeg 
+2025-02-26T23:12:50.560+0800	INFO	 {23:12:50} | 200 |      0s | GET     | /static/js/bootstrap.bundle.min.js 
+2025-02-26T23:12:51.444+0800	INFO	 {23:12:51} | 404 |      0s | GET     | /favicon.ico 
+2025-02-26T23:12:53.505+0800	INFO	 {23:12:53} | 200 |      0s | GET     | /order 
+2025-02-26T23:12:53.548+0800	INFO	 {23:12:53} | 200 |      0s | GET     | /static/css/bootstrap.min.css 
+2025-02-26T23:12:53.555+0800	INFO	 {23:12:53} | 200 |      0s | GET     | /static/image/logo.jpg 
+2025-02-26T23:12:53.555+0800	INFO	 {23:12:53} | 200 |      0s | GET     | /static/image/t-shirt-1.jpeg 
+2025-02-26T23:12:53.596+0800	INFO	 {23:12:53} | 200 |      0s | GET     | /static/image/t-shirt.jpeg 
+2025-02-26T23:12:53.597+0800	INFO	 {23:12:53} | 200 |      0s | GET     | /static/js/bootstrap.bundle.min.js 
+2025-02-26T23:12:53.598+0800	INFO	 {23:12:53} | 200 |      0s | GET     | /static/image/notebook.jpeg 
+2025-02-26T23:12:54.507+0800	INFO	 {23:12:54} | 404 |      0s | GET     | /favicon.ico 

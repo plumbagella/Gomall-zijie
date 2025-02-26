@@ -77,6 +77,7 @@ func (s *ListOrderService) Run(req *order.ListOrderReq) (resp *order.ListOrderRe
 				ZipCode:       v.Consignee.ZipCode,
 			},
 			OrderItems: items, // 订单中所有订单项的集合
+			OrderState: string(v.OrderState), // 订单状态
 		}
 
 		// 将构造好的订单添加到最终返回的订单列表中

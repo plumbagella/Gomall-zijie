@@ -38,7 +38,3 @@ func GetByEmail(db *gorm.DB, ctx context.Context, email string) (user *User, err
 func Create(db *gorm.DB, ctx context.Context, user *User) error {
 	return db.WithContext(ctx).Create(user).Error
 }
-
-func Delete(db *gorm.DB, ctx context.Context, user *User) error {
-	return db.WithContext(ctx).Delete(user).Error
-}

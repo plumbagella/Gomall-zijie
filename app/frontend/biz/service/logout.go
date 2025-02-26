@@ -19,7 +19,7 @@ import (
 
 	common "github.com/cloudwego/biz-demo/gomall/app/frontend/hertz_gen/frontend/common"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol"
+	"github.com/hertz-contrib/sessions"
 )
 
 type LogoutService struct {
@@ -32,16 +32,8 @@ func NewLogoutService(Context context.Context, RequestContext *app.RequestContex
 }
 
 func (h *LogoutService) Run(req *common.Empty) (resp *common.Empty, err error) {
-	// 清除 JWT token cookie
-	h.RequestContext.SetCookie(
-		"jwt_token",
-		"",
-		-1, // 立即过期
-		"/",
-		"",
-		protocol.CookieSameSiteLaxMode,
-		false,
-		true,
-	)
-	return &common.Empty{}, nil
+	session := sessions.Default(h.RequestContext)
+	session.Clear()
+	session.Save() //nolint:errcheck
+	return
 }

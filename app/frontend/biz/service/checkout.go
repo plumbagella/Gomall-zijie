@@ -38,16 +38,13 @@ func NewCheckoutService(Context context.Context, RequestContext *app.RequestCont
 
 func (h *CheckoutService) Run(req *checkout.CheckoutReq) (resp map[string]any, err error) {
 	var items []map[string]string
-	// 1. 从上下文中获取当前用户ID（这里的上下文通常包含了从认证中提取的用户信息）
 	userId := frontendutils.GetUserIdFromCtx(h.Context)
 
-	// 2. 调用购物车服务，获取用户的购物车数据
 	carts, err := rpc.CartClient.GetCart(h.Context, &rpccart.GetCartReq{UserId: userId})
 	if err != nil {
 		return nil, err
 	}
 	var total float32
-	// 3. 遍历购物车中的商品，获取商品信息
 	for _, v := range carts.Cart.Items {
 		productResp, err := rpc.ProductClient.GetProduct(h.Context, &rpcproduct.GetProductReq{Id: v.ProductId})
 		if err != nil {
