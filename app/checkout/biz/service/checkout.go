@@ -16,9 +16,11 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/cloudwego/biz-demo/gomall/app/checkout/infra/mq"
 	"github.com/cloudwego/biz-demo/gomall/app/checkout/infra/rpc"
@@ -30,6 +32,7 @@ import (
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/product"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/nats-io/nats.go"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 	"google.golang.org/protobuf/proto"
@@ -45,64 +48,67 @@ func NewCheckoutService(ctx context.Context) *CheckoutService {
 	return &CheckoutService{ctx: ctx}
 }
 
-// // 在 checkout service 中订阅消息队列，等待订单服务返回最终订单ID。
-// func subscribeToOrderResponseQueue() (string, error) {
-// 	// 连接到 RabbitMQ
-// 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
-// 	if err != nil {
-// 		return "", fmt.Errorf("Failed to connect to RabbitMQ: %v", err)
-// 	}
-// 	defer conn.Close()
+// 在 checkout service 中订阅消息队列，等待订单服务返回最终订单ID。
+func subscribeToOrderResponseQueue() (string, error) {
+	// 连接到 RabbitMQ
+	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	if err != nil {
+		return "", fmt.Errorf("Failed to connect to RabbitMQ: %v", err)
+	}
+	defer conn.Close()
 
-// 	ch, err := conn.Channel()
-// 	if err != nil {
-// 		return "", fmt.Errorf("Failed to open a channel: %v", err)
-// 	}
-// 	defer ch.Close()
+	ch, err := conn.Channel()
+	if err != nil {
+		return "", fmt.Errorf("Failed to open a channel: %v", err)
+	}
+	defer ch.Close()
 
-// 	q, err := ch.QueueDeclare(
-// 		"order_response_queue", // name
-// 		false,                  // durable
-// 		false,                  // delete when unused
-// 		false,                  // exclusive
-// 		false,                  // no-wait
-// 		nil,                    // arguments
-// 	)
-// 	if err != nil {
-// 		return "", fmt.Errorf("Failed to declare a queue: %v", err)
-// 	}
+	q, err := ch.QueueDeclare(
+		"order_response_queue", // name
+		false,                  // durable
+		false,                  // delete when unused
+		false,                  // exclusive
+		false,                  // no-wait
+		nil,                    // arguments
+	)
+	if err != nil {
+		return "", fmt.Errorf("Failed to declare a queue: %v", err)
+	}
 
-// 	// 订阅队列
-// 	msgs, err := ch.Consume(
-// 		q.Name, // queue
-// 		"",     // consumer
-// 		true,   // auto-ack
-// 		false,  // exclusive
-// 		false,  // no-local
-// 		false,  // no-wait
-// 		nil,    // args
-// 	)
-// 	if err != nil {
-// 		return "", fmt.Errorf("Failed to register a consumer: %v", err)
-// 	}
+	// 订阅队列
+	msgs, err := ch.Consume(
+		q.Name, // queue
+		"",     // consumer
+		true,   // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
+	if err != nil {
+		return "", fmt.Errorf("Failed to register a consumer: %v", err)
+	}
 
-// 	// 等待订单ID
-// 	for msg := range msgs {
-// 		var response struct {
-// 			TempOrderId  string `json:"temp_order_id"`
-// 			FinalOrderId string `json:"final_order_id"`
-// 		}
-// 		if err := json.Unmarshal(msg.Body, &response); err != nil {
-// 			klog.Errorf("Failed to unmarshal order response: %v", err)
-// 			continue
-// 		}
+	// 设置超时
+	timeout := time.After(30 * time.Second) // 30 秒超时
 
-// 		// 返回最终订单ID
-// 		return response.FinalOrderId, nil
-// 	}
-
-// 	return "", fmt.Errorf("Failed to receive order response")
-// }
+	for {
+		select {
+		case msg := <-msgs:
+			var response struct {
+				FinalOrderId string `json:"final_order_id"`
+			}
+			if err := json.Unmarshal(msg.Body, &response); err != nil {
+				klog.Errorf("Failed to unmarshal order response: %v", err)
+				continue
+			}
+			// 返回最终订单ID
+			return response.FinalOrderId, nil
+		case <-timeout:
+			return "", fmt.Errorf("Timeout waiting for order response")
+		}
+	}
+}
 
 /*
 Run 方法用于执行结账流程，主要包括以下步骤：
@@ -223,7 +229,12 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	// 如果订单创建成功，则提取订单ID信息
 	var orderId string
 	if orderResult != nil || orderResult.Order != nil {
-		orderId = orderResult.Order.OrderId
+		// 订阅消息队列以获取最终订单ID
+		orderId, err = subscribeToOrderResponseQueue()
+		if err != nil {
+			err = fmt.Errorf("Failed to get final order ID from queue: %v", err)
+			return
+		}
 	}
 	// 构造支付请求，其中包含了用户信息、订单ID、支付金额以及信用卡信息
 	payReq := &payment.ChargeReq{

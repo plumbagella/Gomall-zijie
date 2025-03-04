@@ -130,6 +130,57 @@ func CreateOrder(req *order.PlaceOrderReq) error {
 		if err := tx.Create(&itemList).Error; err != nil {
 			return err
 		}
+
+		// Connect to RabbitMQ
+		conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+		if err != nil {
+			return fmt.Errorf("Failed to connect to RabbitMQ: %v", err)
+		}
+		defer conn.Close()
+
+		ch, err := conn.Channel()
+		if err != nil {
+			return fmt.Errorf("Failed to open a channel: %v", err)
+		}
+		defer ch.Close()
+
+		q, err := ch.QueueDeclare(
+			"order_response_queue", // name
+			false,                  // durable
+			false,                  // delete when unused
+			false,                  // exclusive
+			false,                  // no-wait
+			nil,                    // arguments
+		)
+		if err != nil {
+			return fmt.Errorf("Failed to declare a queue: %v", err)
+		}
+
+		response := struct {
+			FinalOrderId string `json:"final_order_id"`
+		}{
+			FinalOrderId: o.OrderId,
+		}
+
+		body, err := json.Marshal(response)
+		if err != nil {
+			return fmt.Errorf("Failed to marshal response: %v", err)
+		}
+
+		err = ch.Publish(
+			"",     // exchange
+			q.Name, // routing key
+			false,  // mandatory
+			false,  // immediate
+			amqp.Publishing{
+				ContentType: "application/json",
+				Body:        body,
+			})
+		if err != nil {
+			return fmt.Errorf("Failed to publish a message: %v", err)
+		}
+
+
 		return nil
 	})
 	// err = mysql.DB.Transaction(func(tx *gorm.DB) error {

@@ -1,125 +1,88 @@
 &{Env:test Hertz:{Address::8080 MetricsPort:8090 EnablePprof:true EnableGzip:true EnableAccessLog:true LogLevel:info LogFileName:log/hertz.log LogMaxSize:10 LogMaxBackups:50 LogMaxAge:3 RegistryAddr:localhost:8500} MySQL:{DSN:gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local} Redis:{Address:127.0.0.1:6379 Password: Username: DB:0}}
-2025-03-04T18:51:43.815+0800	INFO	HERTZ: Usin
-2025/03from:"from@example.com" to:"abc@example.com" content_type:
-2025/03/04 18:52:32 [31;1m/root/workspace/Gomall-zijie/app/order/biz/model/order.go:61 [35;1mrecord not found
-[0m[from:"from@example.com" to:"abc@example.com" content_type:"text/plain" subject:"You just created an order in CloudWeGo shop" content:"You just created an order in Cl
-2025/03/04 18:53:22 [31;1m/root/workspace/Gomall-zijie/app/order/biz/model/order.go:61 [35;1mrecord not found
-[0m[33m[0.585ms] [34;1m[rows:0][0m SELECT * FROM `order` WHERE `order`.`order_id` = 'Order is being processed' AND `order`.`user_id` = 2 ORDER BY `order`.`id` LIMIT 1
- WHERE user_id = 2
+2025-03-05T01:30:29.825+0800	INFO	HERTZ: Usin
+2025/03from:"from@example.com" to:"abc@example.com" content_type:"text/plain" subject:"You just created an order in CloudWeGo shop" content:"You just created an order in CloudWeGo shop"from:"from@example.com" to:"abc@example.com" content_type:"text/plain" subject:"You just created an order in CloudWeGo shop" content:"You just created an order in CloudWeGo shop"space/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.697ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:15 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.660ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
+2025/03/05 01:31:23 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.637ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:16 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.603ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
+2025/03/05 01:31:24 [31;1m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:42 [35;1mrecord not found
+[0m[33m[1.109ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE `cart`.`user_id` = 2 AND `cart`.`product_id` = 3 ORDER BY `cart`.`id` LIMIT 1
 
-2025/03/04 18:52:21 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.700ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
+2025/03/05 01:31:24 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.611ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:22 [31;1m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:42 [35;1mrecord not found
-[0m[33m[1.078ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE `cart`.`user_id` = 2 AND `cart`.`product_id` = 3 ORDER BY `cart`.`id` LIMIT 1
+2025/03/05 01:31:24 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.757ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:22 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+2025/03/05 01:31:25 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.700ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
+
+2025/03/05 01:31:25 [32m/root/workspace/Gomall-zijie/a2025-03-05T01:31:25.831+0800	INFO	 {01:31:25} | 200 |      0s | GET     | /checkout 
+2025-03-05T01:31:25.93
+2025/03/05 01:31:29 [32m/root/workspace/Gomall-zijie/app/cart/b2025-03-05T01:31:29.059+0800	INFO	 {01:31:28} | 200 |      0s | POST    | /checkout/waiting 
+2025-03-05T01:31:29.169+0800	INFO	 {01:31:28} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:31:34.193+0800	INFO	 {01:31:33} | 200 |      0s | GET     | /checkout/result 
+2025-03-05T01:31:35.469+0800	INFO	 {01:31:35} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:31:35.790+0800	INFO	 {01:31:35} | 200 |      0s | GET     | /order 
+2025-03-05T01:31:35.884+0800	INFO	 {01:31:35} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:31:47.707+0800	INFO	 {01:31:47} | 200 |      0s | GET     | / 
+2025-03-05T01:31:47.804+0800	INFO	 {01:31:47} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:34.219+0800	INFO	 {01:33:34} | 200 |      0s | GET     | /product 
+2025-03-05T01:33:34.331+0800	INFO	 {01:33:34} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:37.804+0800	INFO	 {01:33:37} | 302 |      0s | POST    | /cart 
+2025-03-05T01:33:37.826+0800	INFO	 {01:33:37} | 200 |      0s | GET     | /cart 
+2025-03-05T01:33:37.926+0800	INFO	 {01:33:37} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:40.633+0800	INFO	 {01:33:40} | 200 |      0s | GET     | /category/sticker 
+2025-03-05T01:33:40.750+0800	INFO	 {01:33:40} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:41.457+0800	INFO	 {01:33:41} | 200 |      0s | GET     | /product 
+2025-03-05T01:33:41.569+0800	INFO	 {01:33:41} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:42.378+0800	INFO	 {01:33:42} | 302 |      0s | POST    | /cart 
+2025-03-05T01:33:42.408+0800	INFO	 {01:33:42} | 200 |      0s | GET     | /cart 
+2025-03-05T01:33:42.530+0800	INFO	 {01:33:42} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:44.023+0800	INFO	 {01:33:43} | 200 |      0s | GET     | /checkout 
+2025-03-05T01:33:44.128+0800	INFO	 {01:33:44} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:48.499+0800	INFO	 {01:33:48} | 200 |      0s | POST    | /checkout/waiting 
+2025-03-05T01:33:48.612+0800	INFO	 {01:33:48} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:53.617+0800	INFO	 {01:33:53} | 200 |      0s | GET     | /checkout/result 
+2025-03-05T01:33:53.743+0800	INFO	 {01:33:53} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:33:57.478+0800	INFO	 {01:33:57} | 200 |      0s | GET     | /order 
+2025-03-05T01:33:57.578+0800	INFO	 {01:33:57} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:34:00.706+0800	INFO	 {01:34:00} | 200 |      0s | GET     | /category/t-shirt 
+2025-03-05T01:34:00.822+0800	INFO	 {01:34:00} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:34:01.779+0800	INFO	 {01:34:01} | 200 |      0s | GET     | /product 
+2025-03-05T01:34:01.901+0800	INFO	 {01:34:01} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:34:03.358+0800	INFO	 {01:34:03} | 302 |      0s | POST    | /cart 
+2025-03-05T01:34:03.384+0800	INFO	 {01:34:03} | 200 |      0s | GET     | /cart 
+2025-03-05T01:34:03.502+0800	INFO	 {01:34:03} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:34:04.605+0800	INFO	 {01:34:04} | 200 |      0s | GET     | /checkout 
+2025-03-05T01:34:04.816+0800	INFO	 {01:34:04} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:34:08.629+0800	INFO	 {01:34:08} | 200 |      0s | POST    | /checkout/waiting 
+2025-03-05T01:34:08.741+0800	INFO	 {01:34:08} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:34:17.184+0800	INFO	 {01:34:17} | 200 |      0s | GET     | /order 
+2025-03-05T01:34:17.298+0800	INFO	 {01:34:17} | 404 |      0s | GET     | /favicon.ico 
+2025-03-05T01:57:45.657+0800	INFO	 {01:57:45} | 200 |      0s | GET     | / 
+2025-03-05T01:57:46.505+0800	INFO	 {01:57:46} | 404 |      0s | GET     | /favicon.ico 
+t/biz/model/cart.go:36
+[0m[33m[0.729ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
+
+2025/03/05 01:34:03 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
 [0m[33m[0.709ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:22 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.745ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
+2025/03/05 01:34:04 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.813ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:25 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.699ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
+2025/03/05 01:34:04 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.885ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:26 [31;1m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:42 [35;1mrecord not found
-[0m[33m[2.063ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE `cart`.`user_id` = 2 AND `cart`.`product_id` = 2 ORDER BY `cart`.`id` LIMIT 1
+2025/03/05 01:34:08 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.667ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:26 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.625ms] [34;1m[rows:2][0m SELECT * FROM `cart` WHERE user_id = 2
+2025/03/05 01:34:08 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.616ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:26 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.644ms] [34;1m[rows:2][0m SELECT * FROM `cart` WHERE user_id = 2
+2025/03/05 01:34:17 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.643ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
 
-2025/03/04 18:52:28 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.736ms] [34;1m[rows:2][0m SELECT * FROM `cart` WHERE user_id = 2
-
-2025/03/04 18:52:28 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.755ms] [34;1m[rows:2][0m SELECT * FROM `cart` WHERE user_id = 2
-
-2025/03/04 18:52:32 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.728ms] [34;1m[rows:2][0m SELECT * FROM `cart` WHERE user_id = 2
-
-2025/03/04 18:52:32 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.575ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
-
-2025/03/04 18:53:02 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.787ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
-
-2025/03/04 18:53:15 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.731ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
-
-2025/03/04 18:53:17 [31;1m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:42 [35;1mrecord not found
-[0m[33m[0.646ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE `cart`.`user_id` = 2 AND `cart`.`product_id` = 5 ORDER BY `cart`.`id` LIMIT 1
-
-2025/03/04 18:53:17 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.651ms] [34;1m[rows:1][0m SELECT * FROM `cart` WHERE user_id = 2
-
-2025/03/04 18:53:17 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/c2025-03-04T18:53:17.411+0800	INFO	 {18:53:16} | 200 |      0s | GET     | /cart 
-2025-03
-2025/03/04 18:53:18 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.g2025-03-04T18:53:18.242+0800	INFO	 {18:53:17} | 200 |      0s | GET     | /checkout 
-2025-03-04T18:53:18.343+0800	INFO	 {18:53:17} | 404 |      0s | GET     | /favicon.ico 
-2025-03-04T18:53:22.370+0800	INFO	 {18:53:21} | 200 |      0s | POST    | /checkout/waiting 
-2025-03-04T18:53:22.466+0800	INFO	 {18:53:22} | 404 |      0s | GET     | /favicon.ico 
-2025-03-04T18:53:26.439+0800	INFO	 {18:53:25} | 200 |      0s | GET     | /order 
-2025-03-04T18:53:26.522+0800	INFO	 {18:53:26} | 404 |      0s | GET     | /favicon.ico 
-2025-03-04T18:53:31.534+0800	INFO	 {18:53:31} | 404 |      0s | GET     | /edit-order/e40585f8-f8e6-11ef-a1ee-00163e46b1bb 
-2025-03-04T18:53:32.983+0800	INFO	 {18:53:32} | 404 |      0s | GET     | /favicon.ico 
-2025-03-04T19:21:04.331+0800	INFO	 {19:21:03} | 200 |      0s | GET     | / 
-2025-03-04T19:21:05.318+0800	INFO	 {19:21:04} | 302 |      0s | GET     | /cart 
-2025-03-0
-2025/03/04 19:21:05 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/2025-03-04T19:21:05.331+0800	INFO	 {19:21:04} | 200 |      0s | GET     | / 
-2025-03-04T1
-2025/03/04 20:23:39 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.560ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/04 20:23:42 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.606ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/04 20:29:05 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.546ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/04 20:29:27 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.667ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/04 21:06:33 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.578ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/04 21:09:50 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.628ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/04 22:40:12 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[1.528ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/05 00:21:42 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.650ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/05 00:23:06 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.631ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/05 00:23:08 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.686ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-
-2025/03/05 00:27:52 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
-[0m[33m[0.639ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 0
-01\\x04\\x03\\x02\\x01\\x02\\x03\\x04\\x01\\x05\\x01\\x06\\x01\\xff\\x01\\x00\\x01\\x00\"". Buffer size=128, contents: "\x16\x03\x01\x00{\x01\x00\x00w\x03\x03txWDL\xe9Kr\xf6"..."\x0e\x04\x01\x04\x03\x02\x01\x02\x03\x04\x01\x05\x01\x06\x01\xff\x01\x00\x01\x00", remoteAddr=65.49.20.66:23868
-2025-03-04T22:40:12.961+0800	INFO	 {22:40:12} | 200 |      0s | GET     | / 
-2025-03-04T22:40:13.607+0800	INFO	 {22:40:13} | 404 |      0s | GET     | /login 
-2025-03-04T23:01:34.749+0800	INFO	 {23:01:34} | 404 |      0s | GET     | /ip 
-2025-03-05T00:21:42.243+0800	INFO	 {00:21:41} | 200 |      0s | GET     | / 
-2025-03-05T00:21:42.957+0800	INFO	 {00:21:42} | 404 |      0s | GET     | /favicon.ico 
-2025-03-05T00:23:06.751+0800	INFO	 {00:23:06} | 200 |      0s | GET     | / 
-2025-03-05T00:23:07.142+0800	INFO	 {00:23:07} | 404 |      0s | GET     | /favicon.ico 
-2025-03-05T00:23:08.355+0800	INFO	 {00:23:08} | 200 |      0s | GET     | /product 
-2025-03-05T00:23:08.669+0800	INFO	 {00:23:08} | 404 |      0s | GET     | /favicon.ico 
-2025-03-05T00:23:09.478+0800	INFO	 {00:23:09} | 404 |      0s | GET     | /favicon.ico 
-2025-03-05T00:27:52.943+0800	INFO	 {00:27:52} | 200 |      0s | GET     | / 
-2025-03-05T00:28:33.859+0800	INFO	 {00:28:33} | 404 |      0s | HEAD    | / 
-2025-03-05T00:28:33.943+0800	INFO	 {00:28:33} | 404 |      0s | HEAD    | / 
-2025-03-05T00:28:39.072+0800	INFO	 {00:28:38} | 404 |      0s | HEAD    | / 
+2025/03/05 01:57:45 [32m/root/workspace/Gomall-zijie/app/cart/biz/model/cart.go:36
+[0m[33m[0.602ms] [34;1m[rows:0][0m SELECT * FROM `cart` WHERE user_id = 2
