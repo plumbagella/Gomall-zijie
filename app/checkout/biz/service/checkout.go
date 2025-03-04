@@ -45,6 +45,65 @@ func NewCheckoutService(ctx context.Context) *CheckoutService {
 	return &CheckoutService{ctx: ctx}
 }
 
+// // 在 checkout service 中订阅消息队列，等待订单服务返回最终订单ID。
+// func subscribeToOrderResponseQueue() (string, error) {
+// 	// 连接到 RabbitMQ
+// 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+// 	if err != nil {
+// 		return "", fmt.Errorf("Failed to connect to RabbitMQ: %v", err)
+// 	}
+// 	defer conn.Close()
+
+// 	ch, err := conn.Channel()
+// 	if err != nil {
+// 		return "", fmt.Errorf("Failed to open a channel: %v", err)
+// 	}
+// 	defer ch.Close()
+
+// 	q, err := ch.QueueDeclare(
+// 		"order_response_queue", // name
+// 		false,                  // durable
+// 		false,                  // delete when unused
+// 		false,                  // exclusive
+// 		false,                  // no-wait
+// 		nil,                    // arguments
+// 	)
+// 	if err != nil {
+// 		return "", fmt.Errorf("Failed to declare a queue: %v", err)
+// 	}
+
+// 	// 订阅队列
+// 	msgs, err := ch.Consume(
+// 		q.Name, // queue
+// 		"",     // consumer
+// 		true,   // auto-ack
+// 		false,  // exclusive
+// 		false,  // no-local
+// 		false,  // no-wait
+// 		nil,    // args
+// 	)
+// 	if err != nil {
+// 		return "", fmt.Errorf("Failed to register a consumer: %v", err)
+// 	}
+
+// 	// 等待订单ID
+// 	for msg := range msgs {
+// 		var response struct {
+// 			TempOrderId  string `json:"temp_order_id"`
+// 			FinalOrderId string `json:"final_order_id"`
+// 		}
+// 		if err := json.Unmarshal(msg.Body, &response); err != nil {
+// 			klog.Errorf("Failed to unmarshal order response: %v", err)
+// 			continue
+// 		}
+
+// 		// 返回最终订单ID
+// 		return response.FinalOrderId, nil
+// 	}
+
+// 	return "", fmt.Errorf("Failed to receive order response")
+// }
+
 /*
 Run 方法用于执行结账流程，主要包括以下步骤：
 1. 获取购物车内容。
@@ -113,11 +172,16 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	// STEP 3: 创建订单
 	// -------------------------------
 	// 构造订单请求，其中包含用户ID、货币类型以及订单项信息
+
+	// tempOrderID, _ := uuid.NewUUID()
+
+	// 构造订单请求，其中包含用户ID、货币类型以及订单项信息
 	orderReq := &order.PlaceOrderReq{
 		UserId:       req.UserId,
 		UserCurrency: "USD",
 		OrderItems:   oi,
 		Email:        req.Email,
+		// TempOrderId:  tempOrderID, // 添加临时订单ID
 	}
 	// 如果请求中包含地址信息，则进行地址转换和设置
 	if req.Address != nil {

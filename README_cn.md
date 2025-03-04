@@ -69,6 +69,17 @@ if you want to stop their docker application,you can run `make env-stop`.
 ```
 make run svc=`svcName`
 ```
+
+### 启动所有服务
+```
+./scripts/run_all.sh
+```
+
+### 关闭所有服务
+```
+./scripts/stop_all.sh
+```
+
 ### 浏览 Gomall 站点
 ```
 make open-gomall

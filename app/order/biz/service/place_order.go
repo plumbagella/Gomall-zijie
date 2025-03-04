@@ -16,12 +16,14 @@ package service
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/cloudwego/biz-demo/gomall/app/order/biz/dal/mysql"
 	"github.com/cloudwego/biz-demo/gomall/app/order/biz/model"
 	order "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order"
 	"github.com/google/uuid"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"gorm.io/gorm"
 )
 
@@ -40,7 +42,60 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 		return
 	}
 
-	err = mysql.DB.Transaction(func(tx *gorm.DB) error {
+	// Connect to RabbitMQ
+	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	if err != nil {
+		return nil, fmt.Errorf("Failed to connect to RabbitMQ: %v", err)
+	}
+	defer conn.Close()
+
+	ch, err := conn.Channel()
+	if err != nil {
+		return nil, fmt.Errorf("Failed to open a channel: %v", err)
+	}
+	defer ch.Close()
+
+	q, err := ch.QueueDeclare(
+		"order_queue", // name
+		false,         // durable
+		false,         // delete when unused
+		false,         // exclusive
+		false,         // no-wait
+		nil,           // arguments
+	)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to declare a queue: %v", err)
+	}
+
+	body, err := json.Marshal(req) // Serialize req to JSON
+	if err != nil {
+		return nil, fmt.Errorf("Failed to marshal request: %v", err)
+	}
+
+	err = ch.Publish(
+		"",     // exchange
+		q.Name, // routing key
+		false,  // mandatory
+		false,  // immediate
+        amqp.Publishing{
+            ContentType: "application/json",
+            Body:        body,
+        })
+	if err != nil {
+		return nil, fmt.Errorf("Failed to publish a message: %v", err)
+	}
+
+	resp = &order.PlaceOrderResp{
+		Order: &order.OrderResult{
+			OrderId: "Order is being processed",
+		},
+	}
+	return
+}
+
+// CreateOrder processes the order creation logic
+func CreateOrder(req *order.PlaceOrderReq) error {
+	return mysql.DB.Transaction(func(tx *gorm.DB) error {
 		orderId, _ := uuid.NewUUID()
 
 		o := &model.Order{
@@ -75,14 +130,51 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 		if err := tx.Create(&itemList).Error; err != nil {
 			return err
 		}
-		resp = &order.PlaceOrderResp{
-			Order: &order.OrderResult{
-				OrderId: orderId.String(),
-			},
-		}
-
 		return nil
 	})
+	// err = mysql.DB.Transaction(func(tx *gorm.DB) error {
+	// 	orderId, _ := uuid.NewUUID()
 
-	return
+	// 	o := &model.Order{
+	// 		OrderId:      orderId.String(),
+	// 		OrderState:   model.OrderStatePlaced,
+	// 		UserId:       req.UserId,
+	// 		UserCurrency: req.UserCurrency,
+	// 		Consignee: model.Consignee{
+	// 			Email: req.Email,
+	// 		},
+	// 	}
+	// 	if req.Address != nil {
+	// 		a := req.Address
+	// 		o.Consignee.Country = a.Country
+	// 		o.Consignee.State = a.State
+	// 		o.Consignee.City = a.City
+	// 		o.Consignee.StreetAddress = a.StreetAddress
+	// 	}
+	// 	if err := tx.Create(o).Error; err != nil {
+	// 		return err
+	// 	}
+
+	// 	var itemList []*model.OrderItem
+	// 	for _, v := range req.OrderItems {
+	// 		itemList = append(itemList, &model.OrderItem{
+	// 			OrderIdRefer: o.OrderId,
+	// 			ProductId:    v.Item.ProductId,
+	// 			Quantity:     v.Item.Quantity,
+	// 			Cost:         v.Cost,
+	// 		})
+	// 	}
+	// 	if err := tx.Create(&itemList).Error; err != nil {
+	// 		return err
+	// 	}
+	// 	resp = &order.PlaceOrderResp{
+	// 		Order: &order.OrderResult{
+	// 			OrderId: orderId.String(),
+	// 		},
+	// 	}
+
+	// 	return nil
+	// })
+
+	// return
 }
